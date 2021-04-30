@@ -1,4 +1,4 @@
 # react-mesto-api-full
-http://mesto.mahakomar.nomoredomains.club/sign-in
+http://mesto.mahakomar.nomoredomains.club
 
 Сайт для сохранения фотографий. Из России с любовью (и лайками).
