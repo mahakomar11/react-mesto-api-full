@@ -21,7 +21,7 @@ mongoose.connect("mongodb://localhost:27017/mestodb", {
   useUnifiedTopology: true,
 });
 
-const whitelist = ['http://mesto.mahakomar.nomoredomains.club/']
+const whitelist = ['http://mesto.mahakomar.nomoredomains.club/', 'https://mesto.mahakomar.nomoredomains.club/']
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
