@@ -3,6 +3,7 @@ const CustomError = require("../utils/errors");
 
 const getCards = (req, res, next) => {
   Card.find({})
+    .sort("-createdAt")
     .then((cards) => res.send({ cards }))
     .catch(next);
 };
@@ -10,7 +11,8 @@ const getCards = (req, res, next) => {
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
 
-  if (!name || !link) throw new CustomError(400, 'Поля name и link обязательные')
+  if (!name || !link)
+    throw new CustomError(400, "Поля name и link обязательные");
 
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send(card))

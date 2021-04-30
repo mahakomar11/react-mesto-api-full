@@ -21,7 +21,8 @@ const getUserById = (req, res, next) => {
 const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
-  if (!email || !password) throw new CustomError(400, 'Поля email и password обязательные')
+  if (!email || !password)
+    throw new CustomError(400, "Поля email и password обязательные");
 
   bcrypt
     .hash(password, 10)
@@ -33,7 +34,8 @@ const createUser = (req, res, next) => {
 const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
 
-  if (!name || !about) throw new CustomError(400, 'Поля name и about обязательные')
+  if (!name || !about)
+    throw new CustomError(400, "Поля name и about обязательные");
 
   User.findByIdAndUpdate(
     req.user._id,
@@ -47,7 +49,7 @@ const updateProfile = (req, res, next) => {
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
-  if (!avatar) throw new CustomError(400, 'Поле avatar обязательно')
+  if (!avatar) throw new CustomError(400, "Поле avatar обязательно");
 
   User.findByIdAndUpdate(
     req.user._id,
@@ -61,8 +63,11 @@ const updateAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) throw new CustomError(400, 'Поля email и password обязательные')
-  
+  if (!email || !password)
+    throw new CustomError(400, "Поля email и password обязательные");
+
+  const { NODE_ENV, JWT_SECRET } = process.env;
+
   User.findOne({ email })
     .select("+password")
     .then((user) => {
@@ -72,7 +77,7 @@ const login = (req, res, next) => {
         if (!matched)
           throw new CustomError(401, "Неправильные почта или пароль");
 
-        const token = jwt.sign({ _id: user._id }, "some-secret-key", {
+        const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
           expiresIn: "7d",
         });
 
@@ -81,10 +86,17 @@ const login = (req, res, next) => {
             maxAge: 3600000,
             httpOnly: true,
           })
-          .send({ token });
+          .send({ token: true });
       });
     })
     .catch(next);
+};
+
+const logout = (req, res) => {
+  res.clearCookie("jwt", {
+    maxAge: 3600000,
+    httpOnly: true,
+  }).send({message: 'Вы вышли'});
 };
 
 const getProfile = (req, res, next) => {
@@ -100,5 +112,6 @@ module.exports = {
   updateProfile,
   updateAvatar,
   login,
+  logout,
   getProfile,
 };

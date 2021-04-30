@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const REGEX = /https?:\/\/(www.)?[a-z0-9-.]{2,64}\.[a-z]+[-._~:/?#[\]@!$&'()*+,;=\w]*#?/
-//                               [     domen     ].[zone][                path         ]
+// const REGEX = /https?:\/\/(www.)?[a-z0-9-.]{2,64}\.[a-z]+[-._~:/?#[\]@!$&'()*+,;=\w]*#?/
+// //                               [     domen     ].[zone][                path         ]
 
-const linkValidator = (str) => REGEX.exec(str)[0] === str;
+// const linkValidator = (str) => REGEX.exec(str)[0] === str;
 
 const userSchema = mongoose.Schema({
   name: {
@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema({
     type: String,
     default:
       "https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png",
-    validate: linkValidator,
+    validate: validator.isURL,
   },
   email: {
     type: String,
