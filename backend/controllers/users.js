@@ -86,7 +86,7 @@ const login = (req, res, next) => {
             maxAge: 3600000,
             httpOnly: true,
           })
-          .send({ token });
+          .send({ token: true });
       });
     })
     .catch(next);
