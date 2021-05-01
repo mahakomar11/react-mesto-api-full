@@ -26,6 +26,11 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
+    } else if (typeof origin === 'undefined') {
+      // Только для того, чтобы постман работал.
+      // Я не знаю, как включить корс так, чтобы постман при этом отвечал.
+      // Текущее решение наверное не очень хорошее.
+      callback(null, true)
     }
   },
   credentials: true
