@@ -81,24 +81,10 @@ const login = (req, res, next) => {
           expiresIn: "7d",
         });
 
-        return res
-          .cookie("jwt", token, {
-            maxAge: 3600000,
-            httpOnly: true,
-            sameSite: 'None',
-            secure: true,
-          })
-          .send({ token: true });
+        return res.send({ token });
       });
     })
     .catch(next);
-};
-
-const logout = (req, res) => {
-  res.clearCookie("jwt", {
-    maxAge: 3600000,
-    httpOnly: true,
-  }).send({message: 'Вы вышли'});
 };
 
 const getProfile = (req, res, next) => {
@@ -114,6 +100,5 @@ module.exports = {
   updateProfile,
   updateAvatar,
   login,
-  logout,
   getProfile,
 };

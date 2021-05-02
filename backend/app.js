@@ -2,14 +2,13 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const { errors, celebrate, Joi } = require("celebrate");
 const auth = require("./middlewares/auth");
 const handleErrors = require("./middlewares/errors");
 const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
-const { createUser, login, logout } = require("./controllers/users");
+const { createUser, login } = require("./controllers/users");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
@@ -21,26 +20,10 @@ mongoose.connect("mongodb://localhost:27017/mestodb", {
   useUnifiedTopology: true,
 });
 
-const whitelist = ['http://mesto.mahakomar.nomoredomains.club', 'https://mesto.mahakomar.nomoredomains.club']
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else if (typeof origin === 'undefined') {
-      // Только для того, чтобы постман работал.
-      // Я не знаю, как включить корс так, чтобы постман при этом отвечал.
-      // Текущее решение наверное не очень хорошее.
-      callback(null, true)
-    }
-  },
-  credentials: true
-}
-
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 app.use(requestLogger);
 
@@ -74,7 +57,6 @@ app.post(
 app.use(auth);
 app.use("/users", usersRouter);
 app.use("/cards", cardsRouter);
-app.get("/logout", logout)
 app.use(errorLogger);
 app.use(errors());
 app.use(handleErrors);
