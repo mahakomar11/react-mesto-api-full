@@ -28,7 +28,7 @@ const deleteCard = (req, res, next) => {
         return Card.findByIdAndRemove(card._id);
       else
         throw new CustomError(
-          401,
+          403,
           "Пользователь не может удалить чужую карточку"
         );
     })

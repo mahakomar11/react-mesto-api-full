@@ -9,6 +9,8 @@ const handleErrors = (err, req, res, next) => {
       .send({ message: "Пользователь с данным email уже существует" });
   if (err.name === "CustomError")
     return res.status(err.statusCode).send({ message: err.message });
+  if (err.name === "SyntaxError")
+    return res.status(400).send({ message: "Переданы некорректные данные. Проверьте синтаксис json"})
   if (err)
     return res.status(500).send({ message: "Что-то пошло не так" });
   return next()
